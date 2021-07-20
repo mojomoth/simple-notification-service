@@ -43,11 +43,11 @@ func (server *Server) ConnectToServer(in *pb.ClientDetail, stream pb.Notificatio
 }
 
 func (server *Server) sendNotification(clientID string, msg string) {
-	client := server.clients[clientID]
+	// client := server.clients[clientID]
 	stream := server.clientStreams[clientID]
 
 	notificationMessage := &pb.NotificationMessage{
-		Message: fmt.Sprintf("%s(age : %d) currently living in %s :: %s", client.ClientName, client.ClientAge, client.Address, msg),
+		Message: msg, //fmt.Sprintf("%s(age : %d) currently living in %s :: %s", client.ClientName, client.ClientAge, client.Address, msg),
 		Time:    time.Now().UnixNano(),
 	}
 
@@ -70,8 +70,8 @@ func main() {
 
 	pb.RegisterNotificationServer(s, server)
 	// go routine to get server notification essage from stdin
-	// go waitForMessage(server)
-	go Test(server)
+	go waitForMessage(server)
+	// go Test(server)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to server: %v", err)
 	}
@@ -80,7 +80,7 @@ func main() {
 // 1초에 한번씩 체크하는 함수 만들어보기
 func Test(server *Server) {
 	for {
-		fmt.Println(server.clients)
+		fmt.Println(server.clientStreams)
 		time.Sleep(time.Second)
 	}
 }
