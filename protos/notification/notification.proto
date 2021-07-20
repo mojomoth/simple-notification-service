@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = "github.com/dev-zipida.com/simple-notification-service/protos/notification";
+
+package result;
+
+// The Notification service definition.
+service Notification {
+  // ConnectToServer connects to server with the ClientDetail message
+  // this will in response receive stream of NotificationMessage
+  rpc ConnectToServer(ClientDetail) returns (stream NotificationMessage) {}
+}
+
+
+// ClientDetail message
+message ClientDetail {
+  string clientName = 1;
+  int32 clientAge = 2;
+  string address = 3;
+  bool isNepali = 4;
+}
+
+// NotificationMessage is the message sent as notification from the server to the client
+message NotificationMessage{
+  string message = 1;
+  int64 time = 2;
+}
